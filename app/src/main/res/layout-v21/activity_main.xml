@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bgbck"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
+        android:elevation="60dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="32dp"
+                android:layout_height="31dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/back" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="113dp"
+                android:fontFamily="cursive"
+                android:gravity="center"
+                android:text="Preview"
+                android:textColor="@color/Text"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:background="@color/bgbck"
+        android:layout_above="@+id/navbar"
+        tools:listitem="@layout/sample_recyclerview"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:background="@color/bgbck"
+        android:layout_width="match_parent"
+        android:id="@+id/navbar"
+        app:itemIconTint="@color/nav_color"
+        app:itemTextColor="@color/nav_color"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        app:labelVisibilityMode="unlabeled"
+        android:elevation="60dp"
+        app:menu="@menu/menu"/>
+</RelativeLayout>

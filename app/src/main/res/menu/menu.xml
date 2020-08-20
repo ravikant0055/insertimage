@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/btnlight"
+        android:title="@string/menu_light"
+        android:icon="@drawable/lightsun"/>
+    <item
+        android:id="@+id/btnadd"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="@string/menu_add" />
+    <item
+        android:id="@+id/btndark"
+        android:title="@string/menu_dark"
+        android:icon="@drawable/nightsmoon"/>
+</menu>

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Previewsss</string>
+    <string name="menu_light">Light</string>
+    <string name="menu_add">Add</string>
+    <string name="menu_dark">Dark</string>
+    <string name="menu_creative_ideas">Creative Ideas</string>
+    <string name="menu_templates">Templates</string>
+
+</resources>
