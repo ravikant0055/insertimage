@@ -1,6 +1,10 @@
 package Adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,16 +18,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.previewss.R;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import Models.Model_recycler;
 
+import static android.content.ContentValues.TAG;
+
 public class Adapter_recyclerview extends RecyclerView.Adapter<Adapter_recyclerview.viewholder> {
 
-    ArrayList<Model_recycler> list;
+    ArrayList<String> list;
     Context context;
 
-    public Adapter_recyclerview(ArrayList<Model_recycler> list, Context context) {
+    public Adapter_recyclerview(ArrayList<String> list, Context context) {
         this.list = list;
         this.context = context;
     }
@@ -37,8 +44,18 @@ public class Adapter_recyclerview extends RecyclerView.Adapter<Adapter_recyclerv
 
     @Override
     public void onBindViewHolder(@NonNull final viewholder holder, int position) {
-      Model_recycler model = list.get(position);
-      holder.img.setImageResource(model.getPic());
+        String model = list.get(position);
+
+//        convert string to uri
+        Uri uri= Uri.parse(model);
+        Log.d(TAG, "onBindViewHolder:11 "+uri.toString());
+
+        try {
+            Bitmap bitmapv = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+            holder.img.setImageBitmap(bitmapv);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         holder.img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -9,7 +9,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -22,20 +25,38 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import Adapters.Adapter_recyclerview;
 import Models.Model_recycler;
 
+import static java.security.AccessController.getContext;
+
 public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
+    ArrayList<String> list;
+    Adapter_recyclerview adapter;
+
+//    shared preferences
+    SharedPreferences sp;
+    Gson gson;
+
     private final int IMG_REQUEST_ID = 10;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        initialize shared preferences variables
+         sp = getSharedPreferences("shared preferences", Context.MODE_PRIVATE);
+         gson=new Gson();
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -44,36 +65,46 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(navlistner);
 
 
-        ArrayList<Model_recycler> list = new ArrayList<>();
-
-        list.add(new Model_recycler(R.drawable.bbb));
-        list.add(new Model_recycler(R.drawable.drummer));
-        list.add(new Model_recycler(R.drawable.guitar));
-        list.add(new Model_recycler(R.drawable.kabir));
-        list.add(new Model_recycler(R.drawable.kabira));
-        list.add(new Model_recycler(R.drawable.kahawat));
-        list.add(new Model_recycler(R.drawable.ramannegi));
-        list.add(new Model_recycler(R.drawable.sfbs));
-        list.add(new Model_recycler(R.drawable.bbb));
-        list.add(new Model_recycler(R.drawable.drummer));
-        list.add(new Model_recycler(R.drawable.guitar));
-        list.add(new Model_recycler(R.drawable.kabir));
-        list.add(new Model_recycler(R.drawable.kabira));
-        list.add(new Model_recycler(R.drawable.kahawat));
-        list.add(new Model_recycler(R.drawable.ramannegi));
-        list.add(new Model_recycler(R.drawable.sfbs));
-        list.add(new Model_recycler(R.drawable.bbb));
-        list.add(new Model_recycler(R.drawable.drummer));
-        list.add(new Model_recycler(R.drawable.guitar));
-        list.add(new Model_recycler(R.drawable.kabir));
-        list.add(new Model_recycler(R.drawable.kabira));
-        list.add(new Model_recycler(R.drawable.kahawat));
-        list.add(new Model_recycler(R.drawable.ramannegi));
-        list.add(new Model_recycler(R.drawable.sfbs));
 
 
+//        list.add(new Model_recycler(R.drawable.bbb));
+//        list.add(new Model_recycler(R.drawable.drummer));
+//        list.add(new Model_recycler(R.drawable.guitar));
+//        list.add(new Model_recycler(R.drawable.kabir));
+//        list.add(new Model_recycler(R.drawable.kabira));
+//        list.add(new Model_recycler(R.drawable.kahawat));
+//        list.add(new Model_recycler(R.drawable.ramannegi));
+//        list.add(new Model_recycler(R.drawable.sfbs));
+//        list.add(new Model_recycler(R.drawable.bbb));
+//        list.add(new Model_recycler(R.drawable.drummer));
+//        list.add(new Model_recycler(R.drawable.guitar));
+//        list.add(new Model_recycler(R.drawable.kabir));
+//        list.add(new Model_recycler(R.drawable.kabira));
+//        list.add(new Model_recycler(R.drawable.kahawat));
+//        list.add(new Model_recycler(R.drawable.ramannegi));
+//        list.add(new Model_recycler(R.drawable.sfbs));
+//        list.add(new Model_recycler(R.drawable.bbb));
+//        list.add(new Model_recycler(R.drawable.drummer));
+//        list.add(new Model_recycler(R.drawable.guitar));
+//        list.add(new Model_recycler(R.drawable.kabir));
+//        list.add(new Model_recycler(R.drawable.kabira));
+//        list.add(new Model_recycler(R.drawable.kahawat));
+//        list.add(new Model_recycler(R.drawable.ramannegi));
+//        list.add(new Model_recycler(R.drawable.sfbs));
 
-        Adapter_recyclerview adapter = new Adapter_recyclerview(list, this);
+
+//        It will Load the data the Array list of string from Shared preferences which is stored as "list" key.
+        String json =sp.getString("list",null);
+        Type type= new TypeToken<ArrayList<String>>() {}.getType();
+        list=gson.fromJson(json,type);
+
+//        if there is no list in shared preference,initialize the list
+        if(list==null){
+            list = new ArrayList<>();
+        }
+
+
+        adapter = new Adapter_recyclerview(list, this);
         recyclerView.setAdapter(adapter);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
@@ -94,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             int fromPosition = viewHolder.getAdapterPosition();
             int toPosition = target.getAdapterPosition();
 
-            if(recyclerView.getAdapter()!=null) {
+            if (recyclerView.getAdapter() != null) {
                 (recyclerView.getAdapter()).notifyItemMoved(fromPosition, toPosition);
             }
             return false;
@@ -112,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -136,18 +168,18 @@ public class MainActivity extends AppCompatActivity {
                     int id = menuitem.getItemId();
                     switch (id) {
                         case R.id.btnlight:
-                            Toast.makeText(MainActivity.this,"Light Mode",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Light Mode", Toast.LENGTH_SHORT).show();
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             finish();
                             break;
                         case R.id.btnadd:
                             requestimage();
                             break;
                         case R.id.btndark:
-                            Toast.makeText(MainActivity.this,"Dark Mode",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Dark Mode", Toast.LENGTH_SHORT).show();
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             finish();
                             break;
                         default:
@@ -159,24 +191,30 @@ public class MainActivity extends AppCompatActivity {
 
 
     //code for enter in phone storage
-   private void requestimage() {
+    private void requestimage() {
         Intent intent = new Intent();
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
         startActivityForResult(Intent.createChooser(intent, "Select pictue"), IMG_REQUEST_ID);
     }
 
-    //code for geeting images from phone storage
+    //code for getting images from phone storage
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == IMG_REQUEST_ID && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri imguri = data.getData();
-            try {
-                Bitmap bitmapv = MediaStore.Images.Media.getBitmap(getContentResolver(), imguri);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            list.add(imguri.toString());
+
+//            update the list with new uri of image that is selected
+//            it will save the string uri to the list
+            SharedPreferences.Editor editor=sp.edit();
+            String json =gson.toJson(list);
+            editor.putString("list",json);
+            editor.apply();
+
+            adapter.notifyDataSetChanged();
+
         }
     }
 }
